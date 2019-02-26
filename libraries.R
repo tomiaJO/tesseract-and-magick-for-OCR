@@ -1,0 +1,4 @@
+suppressPackageStartupMessages(library(tesseract))
+suppressPackageStartupMessages(library(magick))
+suppressPackageStartupMessages(library(magrittr))
+suppressPackageStartupMessages(library(data.table))
