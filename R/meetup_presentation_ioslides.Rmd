@@ -1,0 +1,68 @@
+---
+title: OCR in R with the <br> Tesseract package
+author: "Tamas Koncz"
+date: "March 6, 2019"
+output: ioslides_presentation
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+
+library(magrittr)
+```
+
+## What is OCR?
+
+OCR = **Optical Character Recognition**
+
+```{r, out.width = '65%', fig.align='center'}
+knitr::include_graphics("../data/ocr2.jpg")
+```
+
+**Tesseract:**  
+- Began as a PhD project at HP Labs ~ 1994  
+- Open sourced in 2005  
+- Development sponsored by Google 2006 →  
+- In R: links to libtesseract C++ library (OCR engine)  
+
+## Motivating Example {.columns-2}
+
+```{r, out.width = '70%', fig.align='center'}
+knitr::include_graphics("../data/xkcd.png")
+```
+
+```{r, echo = TRUE}
+tesseract::ocr("../data/xkcd.png") %>% cat()
+```
+
+## Standard document / Bills / xkcd
+
+```{r, out.width = '70%', fig.align='center'}
+knitr::include_graphics("../data/sarga_csekk.png")
+```
+
+## Bill - code {.smaller}
+```{r, echo = TRUE}
+#tesseract::tesseract_download("hun")
+
+tesseract::ocr("../data/receipt.jpg", eng = "hun") %>% 
+    cat()
+
+engine <- tesseract::tesseract(
+    language = "hun",
+    options = list(tessedit_pageseg_mode = 6)
+)
+
+"../data/receipt2.jpg" %>% 
+    tesseract::ocr(engine = engine) %>% 
+    cat()
+```
+
+## Parameters
+
+##
+Thank you for your attention!
+  
+For meetup materials, please visit my Github:  
+<https://github.com/tomiaJO/tesseract-and-magick-for-OCR>
