@@ -2,7 +2,9 @@
 title: OCR in R with the <br> Tesseract package
 author: "Tamas Koncz"
 date: "March 6, 2019"
-output: ioslides_presentation
+output: 
+    ioslides_presentation:
+        widescreen: true
 ---
 
 
@@ -10,56 +12,69 @@ output: ioslides_presentation
 knitr::opts_chunk$set(echo = FALSE)
 
 library(magrittr)
+library(tesseract)
 ```
 
 ## What is OCR?
 
 OCR = **Optical Character Recognition**
-
-```{r, out.width = '65%', fig.align='center'}
+<br>
+<br>
+```{r, out.width = '75%', fig.align='center'}
 knitr::include_graphics("../data/ocr2.jpg")
 ```
 
-**Tesseract:**  
-- Began as a PhD project at HP Labs ~ 1994  
-- Open sourced in 2005  
-- Development sponsored by Google 2006 →  
-- In R: links to libtesseract C++ library (OCR engine)  
-
-## Motivating Example {.columns-2}
+## Motivating Example {.smaller .columns-2}
 
 ```{r, out.width = '70%', fig.align='center'}
 knitr::include_graphics("../data/xkcd.png")
 ```
 
 ```{r, echo = TRUE}
-tesseract::ocr("../data/xkcd.png") %>% cat()
+ocr("../data/xkcd.png") %>% cat()
 ```
 
-## Standard document / Bills / xkcd
+## About Tesseract:
+
+- Began as a PhD project at HP Labs ~ 1985 - 1994  
+- Open sourced in 2005. 
+- "Developed" by Google since 2006  
+- In R: links to libtesseract C++ library (OCR engine)  
+- **v4.0:** introduces the **LSTM**-based engine, released on October 29, 2018. 
+- Currently support **101** languages
+
+## A Hungarian example
 
 ```{r, out.width = '70%', fig.align='center'}
-knitr::include_graphics("../data/sarga_csekk.png")
+knitr::include_graphics("../data/egri_csillagok_rov_tortenete.jpg")
 ```
 
-## Bill - code {.smaller}
+## A Hungarian example - results {.smaller}
 ```{r, echo = TRUE}
-#tesseract::tesseract_download("hun")
+# tesseract_download("hun")
+ocr("../data/egri_csillagok_rov_tortenete.jpg", eng = "hun") %>% cat()
+```
+zr
+## A "real life" application - reading customer receipts {.smaller .columns-2}
+```{r, out.width = '300px', fig.align='center'}
+knitr::include_graphics("../data/receipt2.jpg")
+```
 
-tesseract::ocr("../data/receipt.jpg", eng = "hun") %>% 
-    cat()
-
-engine <- tesseract::tesseract(
-    language = "hun",
-    options = list(tessedit_pageseg_mode = 6)
-)
-
-"../data/receipt2.jpg" %>% 
-    tesseract::ocr(engine = engine) %>% 
-    cat()
+```{r, echo = TRUE}
+ocr("../data/receipt2.jpg", eng = "hun") %>% cat()
 ```
 
 ## Parameters
+```{r}
+# engine <- tesseract(
+#     language = "hun",
+#     options = list(tessedit_pageseg_mode = 6)
+# )
+# 
+# "../data/receipt2.jpg" %>% 
+#     ocr(engine = engine) %>% 
+#     cat()
+```
 
 ##
 Thank you for your attention!
