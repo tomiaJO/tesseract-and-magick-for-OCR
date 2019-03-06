@@ -39,9 +39,11 @@ ocr("../data/xkcd.png") %>% cat()
 - Began as a PhD project at HP Labs ~ 1985 - 1994  
 - Open sourced in 2005. 
 - "Developed" by Google since 2006  
-- In R: links to libtesseract C++ library (OCR engine)  
+- In R: wrapper to libtesseract C++ library by [Jeroen Ooms](https://github.com/jeroen)  
 - **v4.0:** introduces the **LSTM**-based engine, released on October 29, 2018. 
 - Currently support **101** languages
+<br><br>  
+- In case you have to work with pdf files: check [pdftools](https://github.com/ropensci/pdftools)
 
 ## A Hungarian example
 
@@ -49,31 +51,60 @@ ocr("../data/xkcd.png") %>% cat()
 knitr::include_graphics("../data/egri_csillagok_rov_tortenete.jpg")
 ```
 
-## A Hungarian example - results {.smaller}
+## A Hungarian example - results I. {.smaller}
+```{r, echo = TRUE}
+ocr("../data/egri_csillagok_rov_tortenete.jpg") %>% cat()
+```
+
+## A Hungarian example - results II. {.smaller}
 ```{r, echo = TRUE}
 # tesseract_download("hun")
 ocr("../data/egri_csillagok_rov_tortenete.jpg", eng = "hun") %>% cat()
 ```
-zr
-## A "real life" application - reading customer receipts {.smaller .columns-2}
-```{r, out.width = '300px', fig.align='center'}
-knitr::include_graphics("../data/receipt2.jpg")
+
+## Parameters
+```{r, eval = FALSE, echo = TRUE}
+tesseract_params() %>% head()
+```
+
+```{r}
+knitr::kable(tesseract_params() %>% head())
+```
+
+## Reading car plates
+```{r, out.width = '600px', fig.align='center'}
+knitr::include_graphics("../data/volvo.jpg")
+```
+
+## Reading car plates
+```{r}
+ocr("../data/volvo.jpg") %>% cat()
+```
+
+## Reading car plates - cropped
+```{r, out.width = '450px', fig.align='center'}
+knitr::include_graphics("../data/car_plate.png")
 ```
 
 ```{r, echo = TRUE}
-ocr("../data/receipt2.jpg", eng = "hun") %>% cat()
+ocr("../data/car_plate.png") %>% cat()
 ```
 
-## Parameters
+## Page Segmentation
+```{r, eval = FALSE, echo = TRUE}
+tesseract_params("tessedit_pageseg_mode")
+```
+
 ```{r}
-# engine <- tesseract(
-#     language = "hun",
-#     options = list(tessedit_pageseg_mode = 6)
-# )
-# 
-# "../data/receipt2.jpg" %>% 
-#     ocr(engine = engine) %>% 
-#     cat()
+knitr::kable(tesseract_params("tessedit_pageseg_mode"))
+```
+
+## Reading car plates - Page Segmentation + Regex {.smaller}
+```{r, echo = TRUE}
+engine <- tesseract(options = list(tessedit_pageseg_mode = 6))
+ocr("../data/volvo.jpg", eng = engine) %>%
+    stringr::str_replace_all(" ", "") %>%
+    stringr::str_match("[A-Z]{3}-[0-9]{3}")
 ```
 
 ##
