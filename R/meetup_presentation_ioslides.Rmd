@@ -76,11 +76,6 @@ knitr::kable(tesseract_params() %>% head())
 knitr::include_graphics("../data/volvo.jpg")
 ```
 
-## Reading car plates
-```{r}
-ocr("../data/volvo.jpg") %>% cat()
-```
-
 ## Reading car plates - cropped
 ```{r, out.width = '450px', fig.align='center'}
 knitr::include_graphics("../data/car_plate.png")
@@ -89,6 +84,8 @@ knitr::include_graphics("../data/car_plate.png")
 ```{r, echo = TRUE}
 ocr("../data/car_plate.png") %>% cat()
 ```
+
+Check [magick](https://cran.r-project.org/web/packages/magick/vignettes/intro.html) for easy image preprocessing in R
 
 ## Page Segmentation
 ```{r, eval = FALSE, echo = TRUE}
@@ -101,10 +98,13 @@ knitr::kable(tesseract_params("tessedit_pageseg_mode"))
 
 ## Reading car plates - Page Segmentation + Regex {.smaller}
 ```{r, echo = TRUE}
-engine <- tesseract(options = list(tessedit_pageseg_mode = 6))
-ocr("../data/volvo.jpg", eng = engine) %>%
+ocr("../data/volvo.jpg", eng = tesseract(options = list(tessedit_pageseg_mode = 6))) %>%
     stringr::str_replace_all(" ", "") %>%
     stringr::str_match("[A-Z]{3}-[0-9]{3}")
+```
+
+```{r, echo = TRUE}
+ocr("../data/volvo.jpg", eng = tesseract(options = list(tessedit_pageseg_mode = 5))) %>% cat()
 ```
 
 ##
